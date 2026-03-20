@@ -41,7 +41,72 @@ gamma = None if gamma_in is None else float(gamma_in) if 0 < gamma_in < 180 else
 
 status, results = solve_triangle(a=a, b=b, c=c, alpha=alpha, beta=beta, gamma=gamma)
 
+STATUS_ERKLAERUNGEN = {
+    "Noch mindestens 3 Größen nötig (Seiten und/oder Winkel).": (
+        "Ein Dreieck hat 6 Größen (3 Seiten, 3 Winkel). Mindestens 3 davon müssen bekannt sein, "
+        "um die restlichen zu berechnen. Gib weitere Werte ein."
+    ),
+    "Mindestens eine Seite nötig.": (
+        "Nur aus drei Winkeln lässt sich kein Dreieck bestimmen – die Größe wäre beliebig. "
+        "Gib mindestens eine Seitenlänge ein."
+    ),
+    "Diese Kombination wird nicht unterstützt.": (
+        "Die eingegebenen Größen passen nicht zu einem der Standardfälle (SSS, SAS, ASA, AAS, SSA). "
+        "Ändere die Eingabe."
+    ),
+    "Dreiecksungleichung verletzt: Keine Lösung.": (
+        "**SSS** (Seite-Seite-Seite): Bei drei gegebenen Seiten muss die Dreiecksungleichung gelten: "
+        "Jede Seite ist kürzer als die Summe der anderen beiden. Sonst existiert kein Dreieck."
+    ),
+    "Widerspruch in den Winkeln.": (
+        "Die berechneten Winkel ergeben keine sinnvolle Lösung. "
+        "Prüfe die eingegebenen Seitenlängen."
+    ),
+    "Eindeutig lösbar (SSS).": (
+        "**SSS** = Seite-Seite-Seite: Alle drei Seiten sind bekannt. "
+        "Die Winkel werden mit dem Kosinussatz berechnet. Es gibt genau ein passendes Dreieck."
+    ),
+    "SAS/SSA: Genau 2 Seiten und 1 Winkel nötig.": (
+        "Bei 2 Seiten und 1 Winkel fehlt noch eine Angabe. "
+        "**SAS** = der Winkel liegt zwischen den beiden Seiten; **SSA** = der Winkel liegt einer der Seiten gegenüber."
+    ),
+    "Keine Lösung (SSA): Seite gegenüber dem Winkel zu kurz.": (
+        "**SSA** (Seite-Seite-Winkel): Die Seite gegenüber dem gegebenen Winkel ist zu kurz, "
+        "um das Dreieck zu schließen. Es existiert keine Lösung."
+    ),
+    "Eine Lösung (SSA, rechtwinklig).": (
+        "**SSA**: Die Höhe vom gegebenen Winkel trifft genau die gegenüberliegende Seite. "
+        "Es gibt genau ein Dreieck (rechtwinklig an dieser Stelle)."
+    ),
+    "Zwei mögliche Dreiecke (SSA).": (
+        "**SSA** („Kongruenzsatz sws“): Bei zwei Seiten und einem nicht eingeschlossenen Winkel "
+        "können zwei verschiedene Dreiecke die Bedingungen erfüllen. Wähle die gewünschte Lösung."
+    ),
+    "Eindeutig lösbar (SSA).": (
+        "**SSA** = Seite-Seite-Winkel: Zwei Seiten und ein Winkel (nicht zwischen den Seiten) sind bekannt. "
+        "Es gibt genau ein passendes Dreieck."
+    ),
+    "ASA/AAS: Genau 1 Seite und 2 Winkel nötig.": (
+        "Bei 1 Seite und 2 Winkeln fehlt noch eine Angabe. "
+        "**ASA** = die Seite liegt zwischen den Winkeln; **AAS** = die Seite liegt einem Winkel gegenüber."
+    ),
+    "Winkelsumme ≠ 180°.": (
+        "In jedem Dreieck gilt α + β + γ = 180°. "
+        "Die eingegebenen Winkel widersprechen dieser Regel."
+    ),
+    "Keine gültige Lösung.": (
+        "Die eingegebenen Größen führen zu keiner gültigen Dreieckskonstruktion. "
+        "Prüfe die Werte."
+    ),
+    "Eindeutig lösbar (ASA/AAS).": (
+        "**ASA** = Winkel-Seite-Winkel, **AAS** = Winkel-Winkel-Seite: Eine Seite und zwei Winkel sind bekannt. "
+        "Der dritte Winkel folgt aus der Winkelsumme 180°, die Seiten aus dem Sinussatz. Es gibt genau ein Dreieck."
+    ),
+}
+
 st.info(f"**Status:** {status}")
+with st.expander("Was bedeutet das?"):
+    st.markdown(STATUS_ERKLAERUNGEN.get(status, "Keine Erklärung für diesen Status hinterlegt."))
 
 if results:
     if len(results) > 1:
